@@ -99,22 +99,23 @@ window.addEventListener("load", function () {
         /**
          * Returns a random number between min (inclusive) and max (exclusive)
          */
-        function getRandomArbitrary(min, max) {
+        function random_num(min, max) {
             return Math.random() * (max - min) + min;
         }
 
-        var time = 0;        
+        var time = random_num(500, 1500);        
         stage.on('step', function (dt) {
             // Update the current time offset
-            time += dt * 1000;
-            if (time > 1500) {
-                time = 0;
+            time -= dt * 1000;
+            if (time <= 0) {
+                time = random_num(300, 800);
 
+                meteorite_types = ['Y','U','I','H','J','K']
+                var meteorite_type = meteorite_types[random_num(0, 5)];
+                var x = random_num(70, 500);
+                var y = -(random_num(200, 300));
                 // Add in a couple of enemies
-                stage.insert(new Q.Meteorite({ x: getRandomArbitrary(70, 500), y: -200, meteorite_type: 'Y' }));
-                stage.insert(new Q.Meteorite({ x: getRandomArbitrary(70, 500), y: -230, meteorite_type: 'U' }));
-                stage.insert(new Q.Meteorite({ x: getRandomArbitrary(70, 500), y: -300, meteorite_type: 'I' }));
-                stage.insert(new Q.Meteorite({ x: getRandomArbitrary(70, 500), y: -240, meteorite_type: 'J' }));
+                stage.insert(new Q.Meteorite({ x: x, y: y, meteorite_type: meteorite_type }));
             }
         });
     });
