@@ -1,0 +1,16 @@
+{
+    "greenMeteorite": {
+        "sx": 0,
+        "sy": 0,
+        "tileW": 128,
+        "tileH": 206,
+        "frames": 3
+    },
+    "greenMeteoritePoof": {
+        "sx": 384,
+        "sy": 0,
+        "tileW": 128,
+        "tileH": 206,
+        "frames": 3
+    }
+}
