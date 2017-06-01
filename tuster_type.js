@@ -27,13 +27,14 @@ window.addEventListener("load", function () {
 
     Q.animations("meteorite_anim", {
         move: { frames: [0, 1, 2], rate: 1 / 5 },
-        poof: { frames: [3, 4, 5], rate: 1 / 4, loop: false, trigger: "dead" }
+        poof: { frames: [3, 4, 5], rate: 1 / 5, loop: false, trigger: "dead" },
+        boom: { frames: [0, 1, 2], rate: 1 / 5, loop: false, trigger: "dead" }
     });
 
     Q.scene("mainStage", function (stage) {
         // Q.stageTMX("level.tmx", stage);
 
-        Q.state.reset({ score: 0 });
+        Q.state.reset({ score: 0, lifes: 4 });
 
         // Q.stageScene('scoreUI');
         Q.stageScene('background', 0);
@@ -42,56 +43,33 @@ window.addEventListener("load", function () {
     });
 
     Q.scene("game", function (stage) {
-        Q.input.on("y", this, function () {
-            console.log("killing y");
+
+        var keystrokes = "000";
+        function check_keystrokes() {
+            console.log(keystrokes);
             var meteorites = Q("Meteorite", 1);
+            var count = 0;
             meteorites.each(function () {
-                if (this.p.meteorite_type == 'Y') {
-                    this.play('poof');
+                if (this.p.keycombination == keystrokes || this.p.keycombination == keystrokes.split("").reverse().join("")) {
+                    this.explode();
+                    count += 1;
                 }
             });
-        });
-        Q.input.on("u", this, function () {
-            console.log("killing u");
-            var meteorites = Q("Meteorite", 1);
-            meteorites.each(function () {
-                if (this.p.meteorite_type == 'U') {
-                    this.play('poof');
-                }
-            });
-        });
-        Q.input.on("i", this, function () {
-            var meteorites = Q("Meteorite", 1);
-            meteorites.each(function () {
-                if (this.p.meteorite_type == 'I') {
-                    this.play('poof');
-                }
-            });
-        });
-        Q.input.on("h", this, function () {
-            var meteorites = Q("Meteorite", 1);
-            meteorites.each(function () {
-                if (this.p.meteorite_type == 'H') {
-                    this.play('poof');
-                }
-            });
-        });
-        Q.input.on("j", this, function () {
-            var meteorites = Q("Meteorite", 1);
-            meteorites.each(function () {
-                if (this.p.meteorite_type == 'J') {
-                    this.play('poof');
-                }
-            });
-        });
-        Q.input.on("k", this, function () {
-            var meteorites = Q("Meteorite", 1);
-            meteorites.each(function () {
-                if (this.p.meteorite_type == 'K') {
-                    this.play('poof');
-                }
-            });
-        });
+            Q.state.inc("score", (count * 10));
+        }  
+        function add_keystroke(keystroke) {
+            if (keystrokes[2] != keystroke) {
+                keystrokes = keystrokes.substring(1, 3) + keystroke;
+                check_keystrokes();
+            }
+        }  
+
+        Q.input.on("y", this, function () { add_keystroke("y"); });
+        Q.input.on("u", this, function () { add_keystroke("u"); });
+        Q.input.on("i", this, function () { add_keystroke("i"); });
+        Q.input.on("h", this, function () { add_keystroke("h"); });
+        Q.input.on("j", this, function () { add_keystroke("j"); });
+        Q.input.on("k", this, function () { add_keystroke("k"); });
 
         // Create the player and add them to the stage
         // var player = stage.insert(new Q.Mario());
@@ -110,12 +88,13 @@ window.addEventListener("load", function () {
             if (time <= 0) {
                 time = random_num(300, 800);
 
-                meteorite_types = ['Y','U','I','H','J','K']
-                var meteorite_type = meteorite_types[random_num(0, 5)];
+                var meteorite_types = ["blue","orange","green","red","purple","yellow"];
+                var random = Math.round(random_num(0, 5));
+                var meteorite_type = meteorite_types[random];
                 var x = random_num(70, 500);
-                var y = -(random_num(200, 300));
+                var y = -(random_num(100, 200));
                 // Add in a couple of enemies
-                stage.insert(new Q.Meteorite({ x: x, y: y, meteorite_type: meteorite_type }));
+                stage.insert(new Q.Meteorite({ x: x, y: y, color: meteorite_type }));
             }
         });
     });
@@ -151,32 +130,31 @@ window.addEventListener("load", function () {
     // Create the Enemy class to add in some baddies
     Q.Sprite.extend("Meteorite", {
         init: function (p) {
-            var color = null;
-            switch (p.meteorite_type) {
-                case 'Y':
-                    color = "blueMeteorite";
+            switch (p.color) {
+                case "blue":
+                    p.keycombination = "huk";
                     break;
-                case 'U':
-                    color = "orangeMeteorite";
+                case "orange":
+                    p.keycombination = "hjk";
                     break;
-                case 'I':
-                    color = "greenMeteorite";
+                case "green":
+                    p.keycombination = "hui";
                     break;
-                case 'H':
-                    color = "redMeteorite";
+                case "red":
+                    p.keycombination = "yji";
                     break;
-                case 'J':
-                    color = "purpleMeteorite";
+                case "purple":
+                    p.keycombination = "yuk";
                     break;
-                case 'K':
-                    color = "yellowMeteorite";
+                case "yellow":
+                    p.keycombination = "yui";
                     break;
             }
 
             this._super(p, {
                 sprite: "meteorite_anim",
-                sheet: color,
-                gravity: 0.2,
+                sheet: p.color+"Meteorite",
+                gravity: 0.1,
                 type: Q.SPRITE_ENEMY,
                 collisionMask: Q.SPRITE_DEFAULT
             });
@@ -184,6 +162,21 @@ window.addEventListener("load", function () {
             this.add('2d, animation');
             this.play('move');
             this.on("dead", this, "destroy");
+        },
+        step: function (dt) {
+            if (this.p.y > 970 && this.p.gravity > 0) {
+                this.p.gravity = 0;
+                this.p.vy = 0;
+                this.sheet("boomMeteorite", false);
+                this.play("boom");
+
+                Q.state.dec("lifes", 1);
+            }
+        },
+        explode: function (dt) {
+            this.p.gravity = 0;
+            this.p.vy = 0;
+            this.play("poof");
         }
     });
 
@@ -191,30 +184,50 @@ window.addEventListener("load", function () {
     Q.UI.Text.extend("Score", {
         init: function (p) {
             this._super({
-                x: 160, y: 50,
-                label: "Coins: 0"
+                x: 155, y: 1065,
+                color: "white",
+                size: 58,
+                outline: "black",
+                outlineWidth: 6,
+                angle: 2,
+                label: "00000000"
             });
-            
+
             Q.state.on("change.score", this, "score");
         },
         score: function (score) {
-            this.p.label = "Coins: " + score;
+            this.p.label = ("00000000" + score).slice(-8);
         }
     });
-    
-    // To display a game over / game won popup box, 
-    // create a endGame scene that takes in a `label` option
-    // to control the displayed message.
-    Q.scene('scoreUI', function (stage) {
-        var label = stage.insert(new Q.Score());
-    }, { stage: 1 });
+    Q.UI.Text.extend("Lifes", {
+        init: function (p) {
+            this._super({
+                x: 375, y: 1075,
+                color: "black",
+                size: 50,
+                label: "x4",
+                align: "left"
+            });
 
-
-    Q.scene('background', function (stage) {
-        var background = stage.insert(new Q.Sprite({
-            asset: "day_background.png",
-            x: Q.width / 2, y: Q.height / 2,
-        }));
+            Q.state.on("change.lifes", this, "lifes");
+        },
+        lifes: function (lifes) {
+            if (lifes < 0) {
+                return;
+            }
+            this.p.label = "x" + lifes;
+        }
+    });
+    Q.UI.Text.extend("Bombs", {
+        init: function (p) {
+            this._super({
+                x: 495, y: 1075,
+                color: "black",
+                size: 50,
+                label: "x0",
+                align: "left"
+            });
+        }
     });
     
     Q.scene('infoUI', function (stage) {
@@ -222,6 +235,74 @@ window.addEventListener("load", function () {
             asset: "info.png",
             x: Q.width / 2, y: Q.height / 2,
         }));
+        var label = stage.insert(new Q.Score());
+        var lifes = stage.insert(new Q.Lifes());
+        var lifes = stage.insert(new Q.Bombs());
+    });
+
+
+    Q.Sprite.extend("Sun", {
+        init: function (p) {
+            this._super(p, {
+                asset: "sun.png",
+                x: 0,
+                y: 0,
+                angle: 4,
+                gravity: 0,
+                collisionMask: Q.SPRITE_NONE
+            });
+
+            this.add('tween');
+            this.animateSun(1);
+        },
+        animateSun: function (step) {
+            var newAngle = step == 1 ? -8 : 8;
+            var newStep = step == 1 ? 2 : 1;
+            
+            this.animate({ angle: newAngle }, 7, Q.Easing.Quadratic.InOut, {
+                delay: 1,
+                callback: function () { this.animateSun(newStep); }
+            });
+        }
+    });
+    Q.Sprite.extend("Clouds", {
+        init: function (p) {
+            this._super(p, {
+                asset: "clouds" + p.clouds_type + ".png",
+                cx: 0,
+                x: p.clouds_type == 1 ? 0 : 720,
+                y: 800,
+                gravity: 0,
+                collisionMask: Q.SPRITE_NONE,
+                vx: -20
+            });
+
+            this.add('2d');
+        },
+        step: function (dt) {
+            if (this.p.x <= -720) {
+                this.p.x = 720;
+            }
+        }
+    });
+    Q.scene('background', function (stage) {
+        var hour = new Date().getHours();
+        if (hour >= 7 && hour < 19) {
+            var background = stage.insert(new Q.Sprite({
+                asset: "day_background.png",
+                x: Q.width / 2, y: Q.height / 2,
+            }));
+            var sun = stage.insert(new Q.Sun());
+        }
+        else {
+            var background = stage.insert(new Q.Sprite({
+                asset: "night_background.png",
+                x: Q.width / 2, y: Q.height / 2,
+            }));
+        }
+
+        var clouds1 = stage.insert(new Q.Clouds({ clouds_type: 1 }));
+        var clouds1 = stage.insert(new Q.Clouds({ clouds_type: 2 }));
     });
 
        
@@ -230,19 +311,13 @@ window.addEventListener("load", function () {
     // assets that are already loaded will be skipped
     // The callback will be triggered when everything is loaded
     Q.load(["day_background.png", "night_background.png", "old_background.png", "sun.png", "clouds1.png", "clouds2.png", "info.png",
-        "blue_meteorite.png", "blue_meteorite.json", "green_meteorite.png", "green_meteorite.json", "orange_meteorite.png", "orange_meteorite.json",
-        "purple_meteorite.png", "purple_meteorite.json", "red_meteorite.png", "red_meteorite.json", "yellow_meteorite.png", "yellow_meteorite.json",
+        "meteorites.png", "meteorites.json",
         // "bigMBoom1.m4a", "bigMBoom2.m4a", "bigMHit1.wav", "bigMHit2.wav", "boom1.m4a", "boom2.m4a",
         // "menu.mp3", "music.mp3", "pause.aif", "pop1.wav", "pop2.wav", "pop3.wav", "pop4.wav", "resume.aif", "tink.aif"
     ], function () {
 
             // Or from a .json asset that defines sprite locations
-            Q.compileSheets("blue_meteorite.png", "blue_meteorite.json");
-            Q.compileSheets("green_meteorite.png", "green_meteorite.json");
-            Q.compileSheets("orange_meteorite.png", "orange_meteorite.json");
-            Q.compileSheets("purple_meteorite.png", "purple_meteorite.json");
-            Q.compileSheets("red_meteorite.png", "red_meteorite.json");
-            Q.compileSheets("yellow_meteorite.png", "yellow_meteorite.json");
+        Q.compileSheets("meteorites.png", "meteorites.json");
 
         // Q.loadTMX("level.tmx", function () {
             // Finally, call stageScene to run the game

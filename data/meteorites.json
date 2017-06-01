@@ -1,0 +1,99 @@
+{
+    "blueMeteorite": {
+        "sx": 0,
+        "sy": 0,
+        "tileW": 128,
+        "tileH": 206,
+        "frames": 3
+    },
+    "blueMeteoritePoof": {
+        "sx": 384,
+        "sy": 0,
+        "tileW": 128,
+        "tileH": 206,
+        "frames": 3
+    },
+
+    "greenMeteorite": {
+        "sx": 0,
+        "sy": 206,
+        "tileW": 128,
+        "tileH": 206,
+        "frames": 3
+    },
+    "greenMeteoritePoof": {
+        "sx": 384,
+        "sy": 206,
+        "tileW": 128,
+        "tileH": 206,
+        "frames": 3
+    },
+
+    "orangeMeteorite": {
+        "sx": 0,
+        "sy": 412,
+        "tileW": 128,
+        "tileH": 206,
+        "frames": 3
+    },
+    "orangeMeteoritePoof": {
+        "sx": 384,
+        "sy": 412,
+        "tileW": 128,
+        "tileH": 206,
+        "frames": 3
+    },
+
+    "purpleMeteorite": {
+        "sx": 0,
+        "sy": 618,
+        "tileW": 128,
+        "tileH": 206,
+        "frames": 3
+    },
+    "purpleMeteoritePoof": {
+        "sx": 384,
+        "sy": 618,
+        "tileW": 128,
+        "tileH": 206,
+        "frames": 3
+    },
+
+    "redMeteorite": {
+        "sx": 0,
+        "sy": 824,
+        "tileW": 128,
+        "tileH": 206,
+        "frames": 3
+    },
+    "redMeteoritePoof": {
+        "sx": 384,
+        "sy": 824,
+        "tileW": 128,
+        "tileH": 206,
+        "frames": 3
+    },
+
+    "yellowMeteorite": {
+        "sx": 0,
+        "sy": 1030,
+        "tileW": 128,
+        "tileH": 206,
+        "frames": 3
+    },
+    "yellowMeteoritePoof": {
+        "sx": 384,
+        "sy":10300,
+        "tileW": 128,
+        "tileH": 206,
+        "frames": 3
+    },
+
+    "boomMeteorite": {
+        "sx": 0,
+        "sy": 1236,
+        "tileW": 128,
+        "tileH": 206,
+        "frames": 3
+    }
+}
