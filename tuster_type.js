@@ -369,14 +369,22 @@ window.addEventListener("load", function () {
         // "bigMBoom1.ogg", "bigMBoom2.ogg", "bigMHit1.ogg", "bigMHit2.ogg", "boom1.ogg", "boom2.ogg",
         // "menu.ogg", "music.ogg", "pause.ogg", "pop1.ogg", "pop2.ogg", "pop3.ogg", "pop4.ogg", "resume.ogg", "tink.ogg"
     ], function () {
-
-            // Or from a .json asset that defines sprite locations
         Q.compileSheets("meteorites.png", "meteorites.json");
+
+        var body = document.getElementsByTagName("BODY")[0];
+        var loading = document.getElementById("loading");
+        body.removeChild(loading);
 
         // Q.loadTMX("level.tmx", function () {
             // Finally, call stageScene to run the game
             Q.stageScene("mainStage");
         // }); 
-    });
+
+        }, {
+            progressCallback: function (loaded, total) {
+                var element = document.getElementById("loading_progress");
+                element.style.width = Math.floor(loaded / total * 100) + "%";
+            }
+        });
 
 });
