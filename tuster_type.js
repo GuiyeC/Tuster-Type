@@ -16,6 +16,8 @@ window.addEventListener("load", function () {
     
     Q.input.keyboardControls({
         ENTER: "start",
+        SPACE: "bomb",
+        P: "pause",
 
         Y: "y",
         U: "u",
@@ -35,7 +37,7 @@ window.addEventListener("load", function () {
         // Q.audio.play("music.ogg", { loop: true });
         // Q.stageTMX("level.tmx", stage);
 
-        Q.state.reset({ score: 0, lifes: 4, time_juice: 0 });
+        Q.state.reset({ score: 0, lifes: 4, bombs: 4, time_juice: 0 });
 
         // Q.stageScene('scoreUI');
         Q.stageScene('background', 0);
@@ -72,6 +74,21 @@ window.addEventListener("load", function () {
         Q.input.on("h", this, function () { add_keystroke("h"); });
         Q.input.on("j", this, function () { add_keystroke("j"); });
         Q.input.on("k", this, function () { add_keystroke("k"); });
+
+        Q.input.on("pause", this, function () {
+            if (stage.paused) {
+                stage.unpause();
+            }
+            else {
+                stage.pause();
+            }
+        });
+        Q.input.on("bomb", this, function () {
+            var meteorites = Q("Meteorite", 1);
+            meteorites.invoke("explode");
+
+            Q.state.dec("bombs", 1);
+        });
 
         // Create the player and add them to the stage
         // var player = stage.insert(new Q.Mario());
@@ -213,7 +230,7 @@ window.addEventListener("load", function () {
                 x: 370, y: 1075,
                 color: "black",
                 size: 50,
-                label: "x4",
+                label: "x" + Q.state.get("lifes"),
                 align: "left"
             });
 
@@ -232,9 +249,17 @@ window.addEventListener("load", function () {
                 x: 495, y: 1075,
                 color: "black",
                 size: 50,
-                label: "x0",
+                label: "x"+Q.state.get("bombs"),
                 align: "left"
             });
+
+            Q.state.on("change.bombs", this, "bombs");
+        },
+        bombs: function (bombs) {
+            if (bombs < 0) {
+                return;
+            }
+            this.p.label = "x" + bombs;
         }
     });
     Q.Sprite.extend("TimeBar", {
