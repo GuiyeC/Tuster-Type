@@ -33,6 +33,13 @@ window.addEventListener("load", function () {
         boom: { frames: [0, 1, 2], rate: 1 / 5, loop: false, trigger: "dead" }
     });
 
+    Q.animations("neon_meteorite_anim", {
+        move: { frames: [0, 1, 2, 3, 4, 5, 2, 5, 2, 5], rate: 1 }
+    });
+    Q.animations("neon_record_anim", {
+        move: { frames: [0, 1], rate: 2 }
+    });
+
     Q.scene("mainStage", function (stage) {
         // Q.audio.play("music.ogg", { loop: true });
         // Q.stageTMX("level.tmx", stage);
@@ -46,10 +53,8 @@ window.addEventListener("load", function () {
     });
 
     Q.scene("game", function (stage) {
-
         var keystrokes = "000";
         function check_keystrokes() {
-            console.log(keystrokes);
             var meteorites = Q("Meteorite", 1);
             var count = 0;
             meteorites.each(function () {
@@ -68,12 +73,11 @@ window.addEventListener("load", function () {
             }
         }  
 
-        Q.input.on("y", this, function () { add_keystroke("y"); });
-        Q.input.on("u", this, function () { add_keystroke("u"); });
-        Q.input.on("i", this, function () { add_keystroke("i"); });
-        Q.input.on("h", this, function () { add_keystroke("h"); });
-        Q.input.on("j", this, function () { add_keystroke("j"); });
-        Q.input.on("k", this, function () { add_keystroke("k"); });
+        let availableKeys = ["y", "u", "i", "h", "j", "k"];
+        for (let index = 0; index < availableKeys.length; index += 1) {
+            let key = availableKeys[index];
+            Q.input.on(key, this, function () { add_keystroke(key); });
+        }
 
         Q.input.on("pause", this, function () {
             if (stage.paused) {
@@ -358,6 +362,77 @@ window.addEventListener("load", function () {
         var clouds1 = stage.insert(new Q.Clouds({ clouds_type: 2 }));
     });
 
+    
+    Q.Sprite.extend("NeonMeteorite", {
+        init: function (p) {
+            this._super(p, {
+                sprite: "neon_meteorite_anim",
+                sheet: "neonMeteorite0",
+                cx: 0, cy: 0,
+                x: 500, y: 0,
+                gravity: 0,
+                collisionMask: Q.SPRITE_NONE
+            });
+
+            this.add('animation');
+            this.play('move');
+        }
+    });
+    Q.Sprite.extend("NeonRecord", {
+        init: function (p) {
+            this._super(p, {
+                sprite: "neon_record_anim",
+                sheet: "neonRecord",
+                cx: 0, cy: 0,
+                x: 18, y: 0,
+                gravity: 0,
+                collisionMask: Q.SPRITE_NONE
+            });
+
+            this.add('animation');
+            this.play('move');
+        }
+    });
+    Q.UI.Text.extend("NeonScore", {
+        init: function (p) {
+            this._super({
+                x: 320, y: 85,
+                color: "#26F811",
+                size: 120,
+                label: "0000"
+            });
+        }
+    });
+    Q.scene('scoreScreen', function (stage) {
+        var background = stage.insert(new Q.Sprite({
+            asset: "score_screen.png",
+            x: Q.width / 2, y: Q.height / 2,
+        }));
+        var neon_meteorite = stage.insert(new Q.NeonMeteorite());
+        var neon_record = stage.insert(new Q.NeonRecord());
+        var score = stage.insert(new Q.NeonScore());
+
+        var restartButton = stage.insert(new Q.UI.Button({
+            x: 165, y: 1030,
+            asset: 'restart_button.png'
+        }))
+        var restart = function () {
+            Q.clearStages();
+            Q.stageScene('mainStage');
+        };
+        restartButton.on("click", restart);
+
+        var exitButton = stage.insert(new Q.UI.Button({
+            x: 475, y: 1030,
+            asset: 'exit_button.png'
+        }))
+        var exit = function () {
+            Q.clearStages();
+            Q.stageScene('mainStage');
+        };
+        exitButton.on("click", exit);
+    });
+
        
     // ## Asset Loading and Game Launch
     // Q.load can be called at any time to load additional assets
@@ -365,11 +440,23 @@ window.addEventListener("load", function () {
     // The callback will be triggered when everything is loaded
     Q.load(["day_background.png", "night_background.png", "old_background.png", "sun.png", "clouds1.png", "clouds2.png",
         "info.png", "timeBar.png",
+        "restart_button.png", "exit_button.png",
+        "score_screen.png", "experience_bar.png", "neon_meteorite.png", "neon_meteorite.json", "neon_record.png",
         "meteorites.png", "meteorites.json",
-        // "bigMBoom1.ogg", "bigMBoom2.ogg", "bigMHit1.ogg", "bigMHit2.ogg", "boom1.ogg", "boom2.ogg",
-        // "menu.ogg", "music.ogg", "pause.ogg", "pop1.ogg", "pop2.ogg", "pop3.ogg", "pop4.ogg", "resume.ogg", "tink.ogg"
+        "bigMBoom1.ogg", "bigMBoom2.ogg", "bigMHit1.ogg", "bigMHit2.ogg", "boom1.ogg", "boom2.ogg",
+        "menu.ogg", "music.ogg", "pause.ogg", "pop1.ogg", "pop2.ogg", "pop3.ogg", "pop4.ogg", "resume.ogg", "tink.ogg"
     ], function () {
         Q.compileSheets("meteorites.png", "meteorites.json");
+        Q.compileSheets("neon_meteorite.png", "neon_meteorite.json");
+        Q.sheet("neonRecord",
+            "neon_record.png",
+            {
+                tilew: 300,
+                tileh: 200,
+                sx: 0,
+                sy: 0,
+                frames: 2
+            });
 
         var body = document.getElementsByTagName("BODY")[0];
         var loading = document.getElementById("loading");
@@ -377,7 +464,7 @@ window.addEventListener("load", function () {
 
         // Q.loadTMX("level.tmx", function () {
             // Finally, call stageScene to run the game
-            Q.stageScene("mainStage");
+        Q.stageScene("scoreScreen");
         // }); 
 
         }, {
