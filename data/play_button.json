@@ -1,0 +1,9 @@
+{
+    "playButton": {
+        "sx": 0,
+        "sy": 0,
+        "tileW": 600,
+        "tileH": 250,
+        "frames": 2
+    }
+}

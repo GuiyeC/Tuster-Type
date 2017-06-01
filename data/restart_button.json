@@ -1,0 +1,9 @@
+{
+    "restartButton": {
+        "sx": 0,
+        "sy": 0,
+        "tileW": 296,
+        "tileH": 110,
+        "frames": 2
+    }
+}

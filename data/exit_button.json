@@ -1,0 +1,9 @@
+{
+    "exitButton": {
+        "sx": 0,
+        "sy": 0,
+        "tileW": 294,
+        "tileH": 104,
+        "frames": 2
+    }
+}
