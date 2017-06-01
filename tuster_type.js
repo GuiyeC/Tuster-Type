@@ -3,7 +3,7 @@ window.addEventListener("load", function () {
     // Set up an instance of the Quintus engine  and include
     // the Sprites, Scenes, Input and 2D module. The 2D module
     // includes the `TileLayer` class as well as the `2d` componet.
-    var Q = window.Q = Quintus({ audioSupported: ['ogg', 'mp3'] })
+    var Q = window.Q = Quintus({ audioSupported: ['ogg'] })
         .include("Sprites, Scenes, Input, 2D, Anim, Touch, UI, TMX, Audio")
         // Maximize this game to whatever the size of the browser is
         .setup({
@@ -32,9 +32,10 @@ window.addEventListener("load", function () {
     });
 
     Q.scene("mainStage", function (stage) {
+        // Q.audio.play("music.ogg", { loop: true });
         // Q.stageTMX("level.tmx", stage);
 
-        Q.state.reset({ score: 0, lifes: 4 });
+        Q.state.reset({ score: 0, lifes: 4, time_juice: 0 });
 
         // Q.stageScene('scoreUI');
         Q.stageScene('background', 0);
@@ -56,6 +57,7 @@ window.addEventListener("load", function () {
                 }
             });
             Q.state.inc("score", (count * 10));
+            Q.state.inc("time_juice", (count * 5));
         }  
         function add_keystroke(keystroke) {
             if (keystrokes[2] != keystroke) {
@@ -171,12 +173,18 @@ window.addEventListener("load", function () {
                 this.play("boom");
 
                 Q.state.dec("lifes", 1);
+
+                // var audio = Math.round(Math.random() * 1 + 1);
+                // Q.audio.play("boom" + audio + ".ogg");
             }
         },
         explode: function (dt) {
             this.p.gravity = 0;
             this.p.vy = 0;
             this.play("poof");
+
+            // var audio = Math.round(Math.random() * 3 + 1);
+            // Q.audio.play("pop" + audio+".ogg");
         }
     });
 
@@ -184,7 +192,7 @@ window.addEventListener("load", function () {
     Q.UI.Text.extend("Score", {
         init: function (p) {
             this._super({
-                x: 155, y: 1065,
+                x: 155, y: 1063,
                 color: "white",
                 size: 58,
                 outline: "black",
@@ -202,7 +210,7 @@ window.addEventListener("load", function () {
     Q.UI.Text.extend("Lifes", {
         init: function (p) {
             this._super({
-                x: 375, y: 1075,
+                x: 370, y: 1075,
                 color: "black",
                 size: 50,
                 label: "x4",
@@ -229,8 +237,28 @@ window.addEventListener("load", function () {
             });
         }
     });
-    
+    Q.Sprite.extend("TimeBar", {
+        init: function (p) {
+            this._super(p, {
+                asset: "timeBar.png",
+                cx: 0, cy: 0,
+                x: 572, y: 164,
+                gravity: 0,
+                collisionMask: Q.SPRITE_NONE
+            });
+        },
+        draw: function (ctx) {
+            // override draw to show the correct level of time juice
+            var level = Q.state.get("time_juice");
+            if (level > 285) {
+                level = 285;
+            }
+            var height = 572 / 285.0 * level;
+            ctx.drawImage(Q.asset(this.p.asset), 0, 572-height, 32, height, 0, 572-height, 32, height);
+        }
+    });
     Q.scene('infoUI', function (stage) {
+        var time_bar = stage.insert(new Q.TimeBar());
         var background = stage.insert(new Q.Sprite({
             asset: "info.png",
             x: Q.width / 2, y: Q.height / 2,
@@ -310,10 +338,11 @@ window.addEventListener("load", function () {
     // Q.load can be called at any time to load additional assets
     // assets that are already loaded will be skipped
     // The callback will be triggered when everything is loaded
-    Q.load(["day_background.png", "night_background.png", "old_background.png", "sun.png", "clouds1.png", "clouds2.png", "info.png",
+    Q.load(["day_background.png", "night_background.png", "old_background.png", "sun.png", "clouds1.png", "clouds2.png",
+        "info.png", "timeBar.png",
         "meteorites.png", "meteorites.json",
-        // "bigMBoom1.m4a", "bigMBoom2.m4a", "bigMHit1.wav", "bigMHit2.wav", "boom1.m4a", "boom2.m4a",
-        // "menu.mp3", "music.mp3", "pause.aif", "pop1.wav", "pop2.wav", "pop3.wav", "pop4.wav", "resume.aif", "tink.aif"
+        // "bigMBoom1.ogg", "bigMBoom2.ogg", "bigMHit1.ogg", "bigMHit2.ogg", "boom1.ogg", "boom2.ogg",
+        // "menu.ogg", "music.ogg", "pause.ogg", "pop1.ogg", "pop2.ogg", "pop3.ogg", "pop4.ogg", "resume.ogg", "tink.ogg"
     ], function () {
 
             // Or from a .json asset that defines sprite locations
