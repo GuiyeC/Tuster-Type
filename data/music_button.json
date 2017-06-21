@@ -1,0 +1,16 @@
+{
+    "musicButtonOn": {
+        "sx": 0,
+        "sy": 0,
+        "tileW": 204,
+        "tileH": 52,
+        "frames": 2
+    },
+    "musicButtonOff": {
+        "sx": 0,
+        "sy": 52,
+        "tileW": 204,
+        "tileH": 52,
+        "frames": 2
+    }
+}

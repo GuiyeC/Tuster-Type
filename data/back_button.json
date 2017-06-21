@@ -1,0 +1,9 @@
+{
+    "backButton": {
+        "sx": 0,
+        "sy": 0,
+        "tileW": 100,
+        "tileH": 80,
+        "frames": 2
+    }
+}
