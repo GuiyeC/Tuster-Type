@@ -194,7 +194,7 @@ window.addEventListener("load", function () {
 
         Q.state.reset({
             score: 0,
-            time_juice: 285.0,
+            time_juice: 0.0,
             slowed_time: false,
             lifes: levelData['lifes'],
             bombs: levelData['bombs'],
@@ -488,7 +488,7 @@ window.addEventListener("load", function () {
                     Q.state.inc("time_juice", (count * 5));
                     
                     if (Q.state.get("time_juice") > MAX_TIME_JUICE) {
-                        Q.state.get("time_juice", MAX_TIME_JUICE);
+                        Q.state.set("time_juice", MAX_TIME_JUICE);
                     }
                 }
             }
@@ -877,7 +877,7 @@ window.addEventListener("load", function () {
                 size: 45,
                 family: "MarkerFeltThin",
                 align: "right",
-                label: levelData['slowTime'] + "s"
+                label: (levelData['slowTime'] / 1000) + "s"
             }));
 
             stage.insert(new Q.UI.Text({
