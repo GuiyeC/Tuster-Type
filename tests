@@ -1,0 +1,22 @@
+[
+    { "lifes": 1, "bombs": 0, "slowTime": 0, "multiplier": 10, "experience": 4500 },
+    { "lifes": 1, "bombs": 0, "slowTime": 5, "multiplier": 11, "experience": 9500 },
+    { "lifes": 1, "bombs": 2, "slowTime": 5, "multiplier": 11, "experience": 15500 },
+    { "lifes": 1, "bombs": 2, "slowTime": 7, "multiplier": 12, "experience": 23500 },
+    { "lifes": 2, "bombs": 2, "slowTime": 7, "multiplier": 12, "experience": 33500 },
+    { "lifes": 2, "bombs": 3, "slowTime": 7, "multiplier": 13, "experience": 46000 },
+    { "lifes": 2, "bombs": 3, "slowTime": 9, "multiplier": 13, "experience": 61000 },
+    { "lifes": 2, "bombs": 3, "slowTime": 9, "multiplier": 14, "experience": 79000 },
+    { "lifes": 2, "bombs": 3, "slowTime": 9, "multiplier": 14, "experience": 100000 },
+    { "lifes": 2, "bombs": 4, "slowTime": 11, "multiplier": 15, "experience": 125000 },
+    { "lifes": 2, "bombs": 4, "slowTime": 11, "multiplier": 15, "experience": 154000 },
+    { "lifes": 2, "bombs": 4, "slowTime": 11, "multiplier": 16, "experience": 188000 },
+    { "lifes": 3, "bombs": 4, "slowTime": 13, "multiplier": 16, "experience": 227000 },
+    { "lifes": 3, "bombs": 5, "slowTime": 13, "multiplier": 17, "experience": 272000 },
+    { "lifes": 3, "bombs": 5, "slowTime": 13, "multiplier": 17, "experience": 332000 },
+    { "lifes": 3, "bombs": 5, "slowTime": 14, "multiplier": 18, "experience": 412000 },
+    { "lifes": 3, "bombs": 5, "slowTime": 14, "multiplier": 18, "experience": 522000 },
+    { "lifes": 3, "bombs": 6, "slowTime": 14, "multiplier": 19, "experience": 672000 },
+    { "lifes": 3, "bombs": 6, "slowTime": 15, "multiplier": 19, "experience": 872000 },
+    { "lifes": 4, "bombs": 6, "slowTime": 15, "multiplier": 20, "experience": -1 }
+]

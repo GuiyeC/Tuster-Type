@@ -1,3 +1,10 @@
+/* TODO
+- Combos
+- Music ON/OFF
+- Titles screen
+*/
+
+
 window.addEventListener("load", function () {
 
     // Set up an instance of the Quintus engine  and include
@@ -26,27 +33,30 @@ window.addEventListener("load", function () {
             "purple": "yuk"
         };
 
+        var SLOWED_RATE = 0.5;
+        var MAX_TIME_JUICE = 285.0;
+
         var levels = [
             { "lifes": 1, "bombs": 0, "slowTime": 0, "multiplier": 10, "experience": 4500 },
-            { "lifes": 1, "bombs": 0, "slowTime": 5, "multiplier": 11, "experience": 9500 },
-            { "lifes": 1, "bombs": 2, "slowTime": 5, "multiplier": 11, "experience": 15500 },
-            { "lifes": 1, "bombs": 2, "slowTime": 7, "multiplier": 12, "experience": 23500 },
-            { "lifes": 2, "bombs": 2, "slowTime": 7, "multiplier": 12, "experience": 33500 },
-            { "lifes": 2, "bombs": 3, "slowTime": 7, "multiplier": 13, "experience": 46000 },
-            { "lifes": 2, "bombs": 3, "slowTime": 9, "multiplier": 13, "experience": 61000 },
-            { "lifes": 2, "bombs": 3, "slowTime": 9, "multiplier": 14, "experience": 79000 },
-            { "lifes": 2, "bombs": 3, "slowTime": 9, "multiplier": 14, "experience": 100000 },
-            { "lifes": 2, "bombs": 4, "slowTime": 11, "multiplier": 15, "experience": 125000 },
-            { "lifes": 2, "bombs": 4, "slowTime": 11, "multiplier": 15, "experience": 154000 },
-            { "lifes": 2, "bombs": 4, "slowTime": 11, "multiplier": 16, "experience": 188000 },
-            { "lifes": 3, "bombs": 4, "slowTime": 13, "multiplier": 16, "experience": 227000 },
-            { "lifes": 3, "bombs": 5, "slowTime": 13, "multiplier": 17, "experience": 272000 },
-            { "lifes": 3, "bombs": 5, "slowTime": 13, "multiplier": 17, "experience": 332000 },
-            { "lifes": 3, "bombs": 5, "slowTime": 14, "multiplier": 18, "experience": 412000 },
-            { "lifes": 3, "bombs": 5, "slowTime": 14, "multiplier": 18, "experience": 522000 },
-            { "lifes": 3, "bombs": 6, "slowTime": 14, "multiplier": 19, "experience": 672000 },
-            { "lifes": 3, "bombs": 6, "slowTime": 15, "multiplier": 19, "experience": 872000 },
-            { "lifes": 4, "bombs": 6, "slowTime": 15, "multiplier": 20, "experience": -1 }
+            { "lifes": 1, "bombs": 0, "slowTime": 5000, "multiplier": 11, "experience": 9500 },
+            { "lifes": 1, "bombs": 2, "slowTime": 5000, "multiplier": 11, "experience": 15500 },
+            { "lifes": 1, "bombs": 2, "slowTime": 7000, "multiplier": 12, "experience": 23500 },
+            { "lifes": 2, "bombs": 2, "slowTime": 7000, "multiplier": 12, "experience": 33500 },
+            { "lifes": 2, "bombs": 3, "slowTime": 7000, "multiplier": 13, "experience": 46000 },
+            { "lifes": 2, "bombs": 3, "slowTime": 9000, "multiplier": 13, "experience": 61000 },
+            { "lifes": 2, "bombs": 3, "slowTime": 9000, "multiplier": 14, "experience": 79000 },
+            { "lifes": 2, "bombs": 3, "slowTime": 9000, "multiplier": 14, "experience": 100000 },
+            { "lifes": 2, "bombs": 4, "slowTime": 11000, "multiplier": 15, "experience": 125000 },
+            { "lifes": 2, "bombs": 4, "slowTime": 11000, "multiplier": 15, "experience": 154000 },
+            { "lifes": 2, "bombs": 4, "slowTime": 11000, "multiplier": 16, "experience": 188000 },
+            { "lifes": 3, "bombs": 4, "slowTime": 13000, "multiplier": 16, "experience": 227000 },
+            { "lifes": 3, "bombs": 5, "slowTime": 13000, "multiplier": 17, "experience": 272000 },
+            { "lifes": 3, "bombs": 5, "slowTime": 13000, "multiplier": 17, "experience": 332000 },
+            { "lifes": 3, "bombs": 5, "slowTime": 14000, "multiplier": 18, "experience": 412000 },
+            { "lifes": 3, "bombs": 5, "slowTime": 14000, "multiplier": 18, "experience": 522000 },
+            { "lifes": 3, "bombs": 6, "slowTime": 14000, "multiplier": 19, "experience": 672000 },
+            { "lifes": 3, "bombs": 6, "slowTime": 15000, "multiplier": 19, "experience": 872000 },
+            { "lifes": 4, "bombs": 6, "slowTime": 15000, "multiplier": 20, "experience": -1 }
         ];
 
     }
@@ -170,7 +180,6 @@ window.addEventListener("load", function () {
 
     Q.scene("mainStage", function (stage) {
         // Q.audio.play("music.ogg", { loop: true });
-        // Q.stageTMX("level.tmx", stage);
 
         var exp = getCookie('experience');
         if (exp == null) {
@@ -183,7 +192,15 @@ window.addEventListener("load", function () {
         var level = getLevelForExperience(exp);
         var levelData = levels[level - 1];
 
-        Q.state.reset({ score: 0, time_juice: 0, lifes: levelData['lifes'], bombs: levelData['bombs'], slowTime: levelData['slowTime'], multiplier: levelData['multiplier'] });
+        Q.state.reset({
+            score: 0,
+            time_juice: 285.0,
+            slowed_time: false,
+            lifes: levelData['lifes'],
+            bombs: levelData['bombs'],
+            slowTime: levelData['slowTime'],
+            multiplier: levelData['multiplier']
+        });
 
         Q.stageScene('background', 0);
         var gameStage = Q.stageScene('game', 1);
@@ -313,7 +330,8 @@ window.addEventListener("load", function () {
                 Q.state.on("change.bombs", this, "bombs");
             },
             bombs: function (bombs) {
-                if (bombs <= 0) {
+                if (bombs < 0) {
+                    this.p.label = "x0";
                     return;
                 }
                 this.p.label = "x" + bombs;
@@ -331,12 +349,27 @@ window.addEventListener("load", function () {
             },
             draw: function (ctx) {
                 // override draw to show the correct level of time juice
-                var level = Q.state.get("time_juice");
-                if (level > 285) {
-                    level = 285;
-                }
-                var height = 572 / 285.0 * level;
+                var juice = Q.state.get("time_juice");
+                var height = 572 / MAX_TIME_JUICE * juice;
                 ctx.drawImage(Q.asset(this.p.asset), 0, 572 - height, 32, height, 0, 572 - height, 32, height);
+            }
+        });
+        Q.Sprite.extend("TimeIndicator", {
+            init: function (p) {
+                this._super(p, {
+                    asset: "time_button.png",
+                    cx: 0, cy: 0,
+                    x: 530, y: 110,
+                    opacity: 0.6,
+                    gravity: 0,
+                    collisionMask: Q.SPRITE_NONE
+                });
+
+                Q.state.on("change.time_juice", this, "time_juice");
+            },
+            time_juice: function (time_juice) {
+                var active = (time_juice >= MAX_TIME_JUICE);
+                this.p.opacity = active ? 1 : 0.6;
             }
         });
         Q.scene('infoUI', function (stage) {
@@ -344,10 +377,12 @@ window.addEventListener("load", function () {
                 asset: "info.png",
                 x: Q.width / 2, y: Q.height / 2,
             }));
-            var time_bar = stage.insert(new Q.TimeBar());
-            var label = stage.insert(new Q.Score());
-            var lifes = stage.insert(new Q.Lifes());
-            var bombs = stage.insert(new Q.Bombs());
+            
+            stage.insert(new Q.TimeBar());
+            stage.insert(new Q.TimeIndicator());
+            stage.insert(new Q.Score());
+            stage.insert(new Q.Lifes());
+            stage.insert(new Q.Bombs());
         });
     }
 
@@ -367,6 +402,10 @@ window.addEventListener("load", function () {
                 this.play('move');
                 this.on("dead", this, "destroy");
 
+                var slowed = Q.state.get("slowed_time");
+                if (slowed) {
+                    this.setRate(SLOWED_RATE);
+                }
                 this.animate({ x: this.p.x, y: 970 }, this.p.speed / 1000.0, Q.Easing.Linear, { callback: this.crash });
             },
             // step: function (dt) {
@@ -443,7 +482,15 @@ window.addEventListener("load", function () {
                 addedScore *= count * multiplier;
 
                 Q.state.inc("score", addedScore);
-                Q.state.inc("time_juice", (count * 5));
+
+                // If the time is currently not slowed and the user can potentially slow time                
+                if (!Q.state.get("slowed_time") && Q.state.get("slowTime") > 0) {
+                    Q.state.inc("time_juice", (count * 5));
+                    
+                    if (Q.state.get("time_juice") > MAX_TIME_JUICE) {
+                        Q.state.get("time_juice", MAX_TIME_JUICE);
+                    }
+                }
             }
 
             var keystrokes = "000";
@@ -469,8 +516,31 @@ window.addEventListener("load", function () {
                     return;
                 }
 
+                var bombs = Q.state.get("bombs");
+                if (bombs <= 0) {
+                    return;
+                }
+
                 clear_meteorites('bomb');
                 Q.state.dec("bombs", 1);
+            });
+
+            function setSlowed(slowed) {
+                Q.state.set("slowed_time", slowed);
+                Q("Meteorite", 1).each(function () {
+                    this.setRate(slowed ? SLOWED_RATE : 1);
+                });
+            }            
+            Q.input.on("slow_time", this, function () {
+                if (stage.paused) {
+                    return;
+                }
+
+                if (Q.state.get("time_juice") < MAX_TIME_JUICE) {
+                    return;
+                }
+
+                setSlowed(true);
             });
 
             // Create the player and add them to the stage
@@ -538,6 +608,20 @@ window.addEventListener("load", function () {
                     // Add in a couple of enemies
                     stage.insert(new Q.Meteorite({ x: x, y: y, speed: speed, color: key }));
                 }
+
+                var slowed = Q.state.get("slowed_time");
+                if (slowed) {
+                    var slowTime = Q.state.get("slowTime");
+                    var fragment = MAX_TIME_JUICE / slowTime;
+
+                    Q.state.dec("time_juice", fragment * dt);
+
+                    if (Q.state.get("time_juice") <= 0) {
+                        Q.state.set("time_juice", 0);
+
+                        setSlowed(false);
+                    }
+                }
             });
         });
     }
@@ -575,12 +659,16 @@ window.addEventListener("load", function () {
                     cx: 0,
                     x: p.clouds_type == 1 ? 0 : 720,
                     y: 800,
+                    opacity: 0.8,
                     gravity: 0,
                     collisionMask: Q.SPRITE_NONE,
-                    vx: -20
+                    vx: -16
                 });
 
                 this.add('2d');
+                Q.state.on("change.slowed_time", this, function (slowed_time) {
+                    this.p.opacity = slowed_time ? 1 : 0.8;
+                });
             },
             step: function (dt) {
                 if (this.p.x <= -720) {
@@ -588,24 +676,41 @@ window.addEventListener("load", function () {
                 }
             }
         });
+        Q.Sprite.extend("OldBackground", {
+            init: function (p) {
+                this._super(p, {
+                    asset: "old_background.png",
+                    x: Q.width / 2, y: Q.height / 2,
+                    opacity: 0
+                });
+
+                this.add('tween');
+                Q.state.on("change.slowed_time", this, function (slowed_time) {
+                    var newOpacity = slowed_time ? 0.6 : 0;
+                    this.animate({ opacity: newOpacity }, 0.3);
+                });
+            }
+        });
         Q.scene('background', function (stage) {
             var hour = new Date().getHours();
             if (hour >= 7 && hour < 19) {
-                var background = stage.insert(new Q.Sprite({
+                stage.insert(new Q.Sprite({
                     asset: "day_background.png",
                     x: Q.width / 2, y: Q.height / 2,
                 }));
-                var sun = stage.insert(new Q.Sun());
+                stage.insert(new Q.Sun());
             }
             else {
-                var background = stage.insert(new Q.Sprite({
+                stage.insert(new Q.Sprite({
                     asset: "night_background.png",
                     x: Q.width / 2, y: Q.height / 2,
                 }));
             }
 
-            var clouds1 = stage.insert(new Q.Clouds({ clouds_type: 1 }));
-            var clouds1 = stage.insert(new Q.Clouds({ clouds_type: 2 }));
+            stage.insert(new Q.Clouds({ clouds_type: 1 }));
+            stage.insert(new Q.Clouds({ clouds_type: 2 }));
+
+            stage.insert(new Q.OldBackground());
         });
     }
 
@@ -782,6 +887,19 @@ window.addEventListener("load", function () {
                 align: "right",
                 label: levelData['multiplier'] + "x"
             }));
+
+            for (var life = 0; life < levelData['lifes']; life += 1) {
+                stage.insert(new Q.Sprite({
+                    asset: "life_icon.png",
+                    x: 533 - (46 * life), y: 652,
+                }));
+            }
+            for (var bomb = 0; bomb < levelData['bombs']; bomb += 1) {
+                stage.insert(new Q.Sprite({
+                    asset: "bomb_icon.png",
+                    x: 533 - (48 * bomb), y: 716,
+                }));
+            }
         });
     }
 
@@ -834,10 +952,10 @@ window.addEventListener("load", function () {
     // The callback will be triggered when everything is loaded
     Q.load(["menu_background.png", "play_button.png", "play_button.json", "leaderboard_button.png", "leaderboard_button.json", "player_button.png", "player_button.json",
         "day_background.png", "night_background.png", "old_background.png", "sun.png", "clouds1.png", "clouds2.png",
-        "info.png", "time_bar.png",
+        "info.png", "time_bar.png", "time_button.png",
         "pause_background.png", "resume_button.png", "resume_button.json", "music_button.png", "music_button.json",
         "restart_button.png", "restart_button.json", "exit_button.png", "exit_button.json",
-        "score_screen.png", "experience_bar.png", "neon_meteorite.png", "neon_meteorite.json", "neon_record.png",
+        "score_screen.png", "life_icon.png", "bomb_icon.png", "experience_bar.png", "neon_meteorite.png", "neon_meteorite.json", "neon_record.png",
         "meteorites.png", "meteorites.json",
         "back_button.png", "back_button.json", "leaderboard_background.png",
         // "bigMBoom1.ogg", "bigMBoom2.ogg", "bigMHit1.ogg", "bigMHit2.ogg", "boom1.ogg", "boom2.ogg",
