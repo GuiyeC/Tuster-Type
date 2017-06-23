@@ -159,8 +159,7 @@ window.addEventListener("load", function () {
                 sheet: 'leaderboardButton'
             }))
             leaderboardButton.on("click", function () {
-                Q.clearStages();
-                Q.stageScene('leaderboardsStage');
+                Q.stageScene('leaderboardsStage', 2);
             });
 
             var playerButton = stage.insert(new Q.UI.Button({
@@ -168,8 +167,7 @@ window.addEventListener("load", function () {
                 sheet: 'playerButton'
             }))
             playerButton.on("click", function () {
-                Q.clearStages();
-                Q.stageScene('playerStage');
+                Q.stageScene('playerStage', 2);
             });
         });
     }
@@ -992,8 +990,7 @@ window.addEventListener("load", function () {
                 sheet: 'backButton'
             }))
             backButton.on("click", function () {
-                Q.clearStages();
-                Q.stageScene('menuStage');
+                Q.clearStage(2);
             });
 
             var highScores = getCookie('high_scores');
@@ -1033,8 +1030,7 @@ window.addEventListener("load", function () {
                 sheet: 'backButton'
             }))
             backButton.on("click", function () {
-                Q.clearStages();
-                Q.stageScene('menuStage');
+                Q.clearStage(2);
             });
 
 
