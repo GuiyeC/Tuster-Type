@@ -194,6 +194,7 @@ window.addEventListener("load", function () {
 
         Q.state.reset({
             score: 0,
+            combo: 0,
             time_juice: 0.0,
             slowed_time: false,
             lifes: levelData['lifes'],
@@ -294,6 +295,54 @@ window.addEventListener("load", function () {
                 this.p.label = ("00000000" + score).slice(-8);
             }
         });
+        Q.UI.Text.extend("Combo", {
+            init: function (p) {
+                this._super({
+                    x: 565, y: 7,
+                    opacity: 0,
+                    family: "CrashLandingBB",
+                    size: 100,
+                    outline: "black",
+                    outlineWidth: 5,
+                    label: "x0"
+                });
+                
+                this.add('tween');
+                Q.state.on("change.combo", this, "combo");
+            },
+            combo: function (combo) {
+                if (combo == null) {
+                    return;
+                }
+                this.stop();
+
+                this.p.label = "x"+combo;
+                this.p.angle = randomNum(0, 8) - 4;
+                this.p.opacity = 1;
+
+                var color = Math.round(randomNum(0, 4));
+                switch (color) {
+                    case 0:
+                    color = "red";
+                    break;
+                    case 1:
+                    color = "blue";
+                    break;
+                    case 2:
+                    color = "green";
+                    break;
+                    case 3:
+                    color = "yellow";
+                    break;
+                    case 4:
+                    color = "orange";
+                    break;
+                }
+                this.p.color = color;
+
+                this.animate({ opacity: 0 }, 0.3, Q.Easing.Quadratic.Linear, { delay: 2 });
+            }
+        });
         Q.UI.Text.extend("Lifes", {
             init: function (p) {
                 this._super({
@@ -378,11 +427,12 @@ window.addEventListener("load", function () {
                 x: Q.width / 2, y: Q.height / 2,
             }));
             
-            stage.insert(new Q.TimeBar());
-            stage.insert(new Q.TimeIndicator());
             stage.insert(new Q.Score());
+            stage.insert(new Q.Combo());
             stage.insert(new Q.Lifes());
             stage.insert(new Q.Bombs());
+            stage.insert(new Q.TimeBar());
+            stage.insert(new Q.TimeIndicator());
         });
     }
 
@@ -408,19 +458,6 @@ window.addEventListener("load", function () {
                 }
                 this.animate({ x: this.p.x, y: 970 }, this.p.speed / 1000.0, Q.Easing.Linear, { callback: this.crash });
             },
-            // step: function (dt) {
-            //     if (this.p.y > 970 && this.p.gravity > 0) {
-            //         this.p.gravity = 0;
-            //         this.p.vy = 0;
-            //         this.sheet("boomMeteorite", false);
-            //         this.play("boom");
-
-            //         Q.state.dec("lifes", 1);
-
-            //         // var audio = Math.round(Math.random() * 1 + 1);
-            //         // Q.audio.play("boom" + audio + ".ogg");
-            //     }
-            // },
             crash: function (dt) {
                 this.stop();
                 this.sheet("boomMeteorite", false);
@@ -482,6 +519,10 @@ window.addEventListener("load", function () {
                 addedScore *= count * multiplier;
 
                 Q.state.inc("score", addedScore);
+
+                if (count > 1) {
+                    Q.state.set("combo", count);
+                }
 
                 // If the time is currently not slowed and the user can potentially slow time                
                 if (!Q.state.get("slowed_time") && Q.state.get("slowTime") > 0) {
