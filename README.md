@@ -2,6 +2,8 @@
 *Proyecto Final Desarrollo de Viedeojuegos Mediante Tecnologías Web*  
 23 de junio de 2017
 
+[Iniciar juego](http://guiyec.github.io/Tuster-Type/)
+
 ## 1. Diseño del juego
 __Controles__
 - __Y-U-I-H-J-K:__ los puntos en los meteoritos hacen referencia a estas teclas, para destruir un meteorito hay que pulsar las teclas seguidas de izquierda a derecha.
