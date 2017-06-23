@@ -1,5 +1,5 @@
 # Tuster-Type
-*Proyecto Final Desarrollo de Viedeojuegos Mediante Tecnologías Web*
+*Proyecto Final Desarrollo de Viedeojuegos Mediante Tecnologías Web*  
 23 de junio de 2017
 
 ## 1. Diseño del juego
@@ -11,7 +11,7 @@ __Controles__
 ![Controles](/controles.jpg)
 
 ### 1.1 Objetivo del juego
-__Tuster Type__ es un juego arcade que nos pone en la piel de una pequeña criatura con la responsabilidad de proteger su mundo de una lluvia de meteoritos usando una varita mágica.
+__Tuster Type__ es un juego arcade que nos pone en la piel de una pequeña criatura con la responsabilidad de proteger su mundo de una lluvia de meteoritos usando una varita mágica.  
 Cada meteorito requerirá de una combinación de teclas específica para destruirlo. El objetivo del juego será aguantar el máximo tiempo posible para conseguir una mayor puntuación, la partida terminará cuando el jugador se quede sin vidas.
 ### 1.2 Principales mecánicas
 * __Puntos:__ el jugador obtendrá puntos según avance el tiempo, además, también conseguirá puntos al destruir meteoritos.
@@ -26,7 +26,7 @@ Cada meteorito requerirá de una combinación de teclas específica para destrui
 * __Movimiento del jugador y coleccionables *(No implementada)*:__ *el jugador podrá moverse por el nivel recogiendo objetos que puedan soltar los meteoritos al ser destruidos.* Esta mecánica no fue implementada ya que se ha considerado que no aportaba nada al juego llegando a ser solo una distracción. La implementación hubiese sido sencilla, un Sprite que se pudiese mover por el suelo del nivel detectando colisiones de posibles coleccionables.
 
 ## 2. Diseño de la implementación
-Para el desarrollo del juego se ha utilizado Quintus. Se ha modificado el componente *'tween'* para poder cambiar la velocidad de las animaciones; ha sido un cambio menor, solo se ha añadido la variable *'_anim_rate'*, un setter y se ha modificado la función *'step'* para modificar la velocidad de la animación.
+Para el desarrollo del juego se ha utilizado Quintus. Se ha modificado el componente *'tween'* para poder cambiar la velocidad de las animaciones; ha sido un cambio menor, solo se ha añadido la variable *'_anim_rate'* y se ha modificado la función *'step'* para modificar la velocidad de la animación.  
 Se han usado cookies para guardar algunos datos como la experiencia acumulada del jugador o las puntuaciones máximas, pudiendo cerrar el juego sin perder los datos.
 
 El juego tiene cinco escenas:
@@ -41,13 +41,13 @@ El juego tiene cinco escenas:
     4. __Juego:__ en este escenario aparecen los meteoritos, es este el escenario que se encarga de reconocer las combinaciones pulsadas destruyendo los meteoritos, maneja la gestión de bombas, ralentización del tiempo, combos y puntuación. El Sprite principal del juego es el *'Meteorite'*, hay seis tipos de meteorito con distintas combinaciones y atributos.
 
 ## 3. Equipo de trabajo y reparto de tareas
-Guillermo Cique Fernández: al ser el único miembro del equipo no ha habido reparto de tareas y toda la carga del desarrollo ha caido sobre mi.
+__Guillermo Cique Fernández:__ al ser el único miembro del equipo no ha habido reparto de tareas y toda la carga del desarrollo ha caido sobre mi.
 
 ## 4. Fuentes y referencias
-Todos los recursos gráficos son propios.
-La música fue creada por un amigo específicamente para el juego.
-La mayoría de los efectos de sonido fueron encontrados en internet hace unos años, de páginas como [SoundBible](http://soundbible.com/) o [Free Sound Effects](https://www.freesoundeffects.com), algunos de los efectos de sonidos, como el sonido de destruir un meteorito, fueron grabados por mi.
-Las fuentes del juego son fuentes gratuitas encontradas en internet.
+Todos los recursos gráficos son propios.  
+La música fue creada por un amigo específicamente para el juego.  
+La mayoría de los efectos de sonido fueron encontrados en internet en páginas como [SoundBible](http://soundbible.com/) o [Free Sound Effects](https://www.freesoundeffects.com), algunos de los efectos de sonidos, como el sonido de destruir un meteorito, fueron grabados por mi.  
+Las tipografías del juego fueron encontradas en internet.  
 
 * __Tuster iOS:__ juego desarrollado en iOS con una mecánica parecida y el mismo protagonista.
 * __Magic Touch DS:__ el referente original del juego, un mago tiene que estallar los globos que sujetan a unos monstruos que caen lentamente del cielo antes de que lleguen al suelo.
