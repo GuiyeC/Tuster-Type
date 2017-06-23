@@ -1,65 +1,13 @@
-/* TODO
-- Combos
-- Music ON/OFF
-- Titles screen
-*/
-
-
 window.addEventListener("load", function () {
 
-    // Set up an instance of the Quintus engine  and include
-    // the Sprites, Scenes, Input and 2D module. The 2D module
-    // includes the `TileLayer` class as well as the `2d` componet.
     var Q = window.Q = Quintus({ audioSupported: ['ogg'] })
-        .include("Sprites, Scenes, Input, 2D, Anim, Touch, UI, TMX, Audio")
-        // Maximize this game to whatever the size of the browser is
+        .include("Sprites, Scenes, Input, Touch, 2D, Anim, UI, Audio")
         .setup({
             width: 640,
             height: 1136
         })
-        // And turn on default input controls and touch input (for UI)
         .controls().touch()
         .enableSound();
-
-
-    { // ## Game variables
-
-        var meteorite_types = {
-            "yellow": "yui",
-            "green": "hui",
-            "orange": "hjk",
-            "red": "yji",
-            "blue": "huk",
-            "purple": "yuk"
-        };
-
-        var SLOWED_RATE = 0.5;
-        var MAX_TIME_JUICE = 285.0;
-
-        var levels = [
-            { "lifes": 1, "bombs": 0, "slowTime": 0, "multiplier": 10, "experience": 4500 },
-            { "lifes": 1, "bombs": 0, "slowTime": 5000, "multiplier": 11, "experience": 9500 },
-            { "lifes": 1, "bombs": 2, "slowTime": 5000, "multiplier": 11, "experience": 15500 },
-            { "lifes": 1, "bombs": 2, "slowTime": 7000, "multiplier": 12, "experience": 23500 },
-            { "lifes": 2, "bombs": 2, "slowTime": 7000, "multiplier": 12, "experience": 33500 },
-            { "lifes": 2, "bombs": 3, "slowTime": 7000, "multiplier": 13, "experience": 46000 },
-            { "lifes": 2, "bombs": 3, "slowTime": 9000, "multiplier": 13, "experience": 61000 },
-            { "lifes": 2, "bombs": 3, "slowTime": 9000, "multiplier": 14, "experience": 79000 },
-            { "lifes": 2, "bombs": 3, "slowTime": 9000, "multiplier": 14, "experience": 100000 },
-            { "lifes": 2, "bombs": 4, "slowTime": 11000, "multiplier": 15, "experience": 125000 },
-            { "lifes": 2, "bombs": 4, "slowTime": 11000, "multiplier": 15, "experience": 154000 },
-            { "lifes": 2, "bombs": 4, "slowTime": 11000, "multiplier": 16, "experience": 188000 },
-            { "lifes": 3, "bombs": 4, "slowTime": 13000, "multiplier": 16, "experience": 227000 },
-            { "lifes": 3, "bombs": 5, "slowTime": 13000, "multiplier": 17, "experience": 272000 },
-            { "lifes": 3, "bombs": 5, "slowTime": 13000, "multiplier": 17, "experience": 332000 },
-            { "lifes": 3, "bombs": 5, "slowTime": 14000, "multiplier": 18, "experience": 412000 },
-            { "lifes": 3, "bombs": 5, "slowTime": 14000, "multiplier": 18, "experience": 522000 },
-            { "lifes": 3, "bombs": 6, "slowTime": 14000, "multiplier": 19, "experience": 672000 },
-            { "lifes": 3, "bombs": 6, "slowTime": 15000, "multiplier": 19, "experience": 872000 },
-            { "lifes": 4, "bombs": 6, "slowTime": 15000, "multiplier": 20, "experience": -1 }
-        ];
-
-    }
 
 
     { // ## Helper functions
@@ -96,7 +44,7 @@ window.addEventListener("load", function () {
         function getLevelForExperience(exp) {
             for (var level = 0; level < levels.length; level += 1) {
                 var data = levels[level];
-                
+
                 if (data['experience'] > exp) {
                     return level + 1;
                 }
@@ -104,8 +52,51 @@ window.addEventListener("load", function () {
 
             return 20;
         }
-    }    
-    
+    }
+
+
+    { // ## Game variables
+
+        // Enable music if the cookie doesn't exist or if it's 'true'        
+        var musicEnabled = (getCookie('musicEnabled') == null || getCookie('musicEnabled') == "true");
+        var SLOWED_RATE = 0.5;
+        var MAX_TIME_JUICE = 285.0;
+
+        var meteorite_types = {
+            "yellow": "yui",
+            "green": "hui",
+            "orange": "hjk",
+            "red": "yji",
+            "blue": "huk",
+            "purple": "yuk"
+        };
+
+        var levels = [
+            { "lifes": 1, "bombs": 0, "slowTime": 0, "multiplier": 10, "experience": 4500 },
+            { "lifes": 1, "bombs": 0, "slowTime": 5000, "multiplier": 11, "experience": 9500 },
+            { "lifes": 1, "bombs": 2, "slowTime": 5000, "multiplier": 11, "experience": 15500 },
+            { "lifes": 1, "bombs": 2, "slowTime": 7000, "multiplier": 12, "experience": 23500 },
+            { "lifes": 2, "bombs": 2, "slowTime": 7000, "multiplier": 12, "experience": 33500 },
+            { "lifes": 2, "bombs": 3, "slowTime": 7000, "multiplier": 13, "experience": 46000 },
+            { "lifes": 2, "bombs": 3, "slowTime": 9000, "multiplier": 13, "experience": 61000 },
+            { "lifes": 2, "bombs": 3, "slowTime": 9000, "multiplier": 14, "experience": 79000 },
+            { "lifes": 2, "bombs": 3, "slowTime": 9000, "multiplier": 14, "experience": 100000 },
+            { "lifes": 2, "bombs": 4, "slowTime": 11000, "multiplier": 15, "experience": 125000 },
+            { "lifes": 2, "bombs": 4, "slowTime": 11000, "multiplier": 15, "experience": 154000 },
+            { "lifes": 2, "bombs": 4, "slowTime": 11000, "multiplier": 16, "experience": 188000 },
+            { "lifes": 3, "bombs": 4, "slowTime": 13000, "multiplier": 16, "experience": 227000 },
+            { "lifes": 3, "bombs": 5, "slowTime": 13000, "multiplier": 17, "experience": 272000 },
+            { "lifes": 3, "bombs": 5, "slowTime": 13000, "multiplier": 17, "experience": 332000 },
+            { "lifes": 3, "bombs": 5, "slowTime": 14000, "multiplier": 18, "experience": 412000 },
+            { "lifes": 3, "bombs": 5, "slowTime": 14000, "multiplier": 18, "experience": 522000 },
+            { "lifes": 3, "bombs": 6, "slowTime": 14000, "multiplier": 19, "experience": 672000 },
+            { "lifes": 3, "bombs": 6, "slowTime": 15000, "multiplier": 19, "experience": 872000 },
+            { "lifes": 4, "bombs": 6, "slowTime": 15000, "multiplier": 20, "experience": -1 }
+        ];
+
+    }
+
+
     Q.input.keyboardControls({
         ENTER: "start",
         SPACE: "bomb",
@@ -135,18 +126,23 @@ window.addEventListener("load", function () {
         Q.animations("neon_record_anim", {
             move: { frames: [0, 1], rate: 2 }
         });
-    }    
+    }
 
 
 
     { // ## Menu Stage
         Q.scene('menuStage', function (stage) {
+            if (musicEnabled) {
+                Q.audio.stop("music.ogg");
+                Q.audio.play("menu.ogg", { loop: true });
+            }    
+
             var background = stage.insert(new Q.Sprite({
                 asset: "menu_background.png",
                 x: Q.width / 2, y: Q.height / 2,
             }));
 
-            
+
             var playButton = stage.insert(new Q.UI.Button({
                 x: 320, y: 420,
                 sheet: 'playButton'
@@ -171,15 +167,18 @@ window.addEventListener("load", function () {
             }))
             playerButton.on("click", function () {
                 Q.clearStages();
-                Q.stageScene('mainStage');
+                Q.stageScene('playerStage');
             });
         });
     }
 
-    
+
 
     Q.scene("mainStage", function (stage) {
-        // Q.audio.play("music.ogg", { loop: true });
+        if (musicEnabled) {
+            Q.audio.stop("menu.ogg");
+            Q.audio.play("music.ogg", { loop: true });
+        }    
 
         var exp = getCookie('experience');
         if (exp == null) {
@@ -209,6 +208,10 @@ window.addEventListener("load", function () {
 
         Q.input.on("pause", this, function () {
             if (gameStage.paused) {
+                if (musicEnabled) {
+                    Q.audio.play("resume.ogg");
+                    Q.audio.play("music.ogg", { loop: true });
+                }    
                 Q.clearStage(2);
                 gameStage.unpause();
             }
@@ -222,6 +225,11 @@ window.addEventListener("load", function () {
 
     { // ## Pause Stage
         Q.scene('pauseStage', function (stage) {
+            if (musicEnabled) {
+                Q.audio.stop("music.ogg");
+                Q.audio.play("pause.ogg");
+            }    
+
             stage.insert(new Q.Sprite({
                 x: Q.width / 2, y: Q.height / 2, color: "rgba(0,0,0,0.5)",
                 w: Q.width, h: Q.height
@@ -237,6 +245,10 @@ window.addEventListener("load", function () {
                 sheet: 'resumeButton'
             }))
             resumeButton.on("click", function () {
+                if (musicEnabled) {
+                    Q.audio.play("resume.ogg");
+                    Q.audio.play("music.ogg", { loop: true });
+                }    
                 Q.clearStage(2);
                 Q.stage(1).unpause();
             });
@@ -261,14 +273,17 @@ window.addEventListener("load", function () {
 
             var musicButton = stage.insert(new Q.UI.Button({
                 x: 205, y: 685,
-                sheet: 'musicButtonOn'
+                sheet: musicEnabled ? 'musicButtonOn' : 'musicButtonOff'
             }))
             musicButton.on("click", function () {
-                if (musicButton.sheet() == 'musicButtonOn') {
-                    musicButton.sheet('musicButtonOff', false);
+                musicEnabled = !musicEnabled;
+                setCookie('musicEnabled', musicEnabled);
+
+                if (musicEnabled) {
+                    musicButton.sheet('musicButtonOn', false);
                 }
                 else {
-                    musicButton.sheet('musicButtonOn', false);
+                    musicButton.sheet('musicButtonOff', false);
                 }
             });
         });
@@ -306,7 +321,7 @@ window.addEventListener("load", function () {
                     outlineWidth: 5,
                     label: "x0"
                 });
-                
+
                 this.add('tween');
                 Q.state.on("change.combo", this, "combo");
             },
@@ -315,30 +330,16 @@ window.addEventListener("load", function () {
                     return;
                 }
                 this.stop();
+                // Reset combo
+                Q.state.set('combo', null);
 
-                this.p.label = "x"+combo;
+                this.p.label = "x" + combo;
                 this.p.angle = randomNum(0, 8) - 4;
                 this.p.opacity = 1;
 
-                var color = Math.round(randomNum(0, 4));
-                switch (color) {
-                    case 0:
-                    color = "red";
-                    break;
-                    case 1:
-                    color = "blue";
-                    break;
-                    case 2:
-                    color = "green";
-                    break;
-                    case 3:
-                    color = "yellow";
-                    break;
-                    case 4:
-                    color = "orange";
-                    break;
-                }
-                this.p.color = color;
+                var color = Math.round(randomNum(0, 3));
+                var colors = ["#26fc1d", "#fc1dfa", "#fc1d1c", "#fcf91d"];
+                this.p.color = colors[color];
 
                 this.animate({ opacity: 0 }, 0.3, Q.Easing.Quadratic.Linear, { delay: 2 });
             }
@@ -426,7 +427,7 @@ window.addEventListener("load", function () {
                 asset: "info.png",
                 x: Q.width / 2, y: Q.height / 2,
             }));
-            
+
             stage.insert(new Q.Score());
             stage.insert(new Q.Combo());
             stage.insert(new Q.Lifes());
@@ -464,15 +465,20 @@ window.addEventListener("load", function () {
                 this.play("boom");
 
                 Q.state.dec("lifes", 1);
-                    // var audio = Math.round(Math.random() * 1 + 1);
-                    // Q.audio.play("boom" + audio + ".ogg");
+
+                if (musicEnabled) {
+                    var audio = Math.round(Math.random() * 1 + 1);
+                    Q.audio.play("boom" + audio + ".ogg");
+                }    
             },
             explode: function (dt) {
                 this.stop();
                 this.play("poof");
 
-                // var audio = Math.round(Math.random() * 3 + 1);
-                // Q.audio.play("pop" + audio+".ogg");
+                if (musicEnabled) {
+                    var audio = Math.round(Math.random() * 3 + 1);
+                    Q.audio.play("pop" + audio + ".ogg");
+                }    
             }
         });
         Q.scene("game", function (stage) {
@@ -490,11 +496,16 @@ window.addEventListener("load", function () {
                 else {
                     meteorites.each(function () {
                         var keycombination = meteorite_types[this.p.color];
+                        // compare input
                         if (keystrokes == null || keycombination == keystrokes || keycombination == keystrokes.split("").reverse().join("")) {
                             this.explode();
                             count += 1;
                         }
                     });
+                }
+                
+                if (count <= 0) {
+                    return;
                 }
 
                 var addedScore = 0;
@@ -520,14 +531,16 @@ window.addEventListener("load", function () {
 
                 Q.state.inc("score", addedScore);
 
+                // Show combo
                 if (count > 1) {
                     Q.state.set("combo", count);
                 }
 
+
                 // If the time is currently not slowed and the user can potentially slow time                
                 if (!Q.state.get("slowed_time") && Q.state.get("slowTime") > 0) {
                     Q.state.inc("time_juice", (count * 5));
-                    
+
                     if (Q.state.get("time_juice") > MAX_TIME_JUICE) {
                         Q.state.set("time_juice", MAX_TIME_JUICE);
                     }
@@ -552,6 +565,7 @@ window.addEventListener("load", function () {
                 Q.input.on(key, this, function () { add_keystroke(key); });
             }
 
+            
             Q.input.on("bomb", this, function () {
                 if (stage.paused) {
                     return;
@@ -566,12 +580,13 @@ window.addEventListener("load", function () {
                 Q.state.dec("bombs", 1);
             });
 
+            
             function setSlowed(slowed) {
                 Q.state.set("slowed_time", slowed);
                 Q("Meteorite", 1).each(function () {
                     this.setRate(slowed ? SLOWED_RATE : 1);
                 });
-            }            
+            }
             Q.input.on("slow_time", this, function () {
                 if (stage.paused) {
                     return;
@@ -584,17 +599,16 @@ window.addEventListener("load", function () {
                 setSlowed(true);
             });
 
-            // Create the player and add them to the stage
-            // var player = stage.insert(new Q.Mario());
-
+            
+            // Time to get a point
             var timeForPoint = 1500;
             var meteoriteTimes = {
                 "yellow": 1000 + randomNum(0, 500),
-                "green": 3000 + randomNum(0, 600), 
+                "green": 3000 + randomNum(0, 600),
                 "orange": 6000 + randomNum(0, 800),
-                "red": 10000 + randomNum(0, 1000), 
+                "red": 10000 + randomNum(0, 1000),
                 "blue": 30000 + randomNum(0, 1000),
-                "purple": 40000 + randomNum(0, 1000), 
+                "purple": 40000 + randomNum(0, 1000),
             };
             var time = randomNum(500, 1500);
 
@@ -608,6 +622,7 @@ window.addEventListener("load", function () {
                     Q.state.inc("score", 1);
                     score += 1;
 
+                    // Calculate next period to get another point, it gets faster                    
                     timeForPoint = ((Math.sqrt(score + 400.0) * 1.6 / ((score + 200.0) / 8.0)) + 0.1) * 1000;
                 }
 
@@ -619,6 +634,9 @@ window.addEventListener("load", function () {
                     }
 
                     // Add meteorite of type 'key'
+                    // Calculate the time of the next meteorite of type 'key' and the speed of the current meteorite
+                    // The time gets shorter the higher the score
+                    // The meteorites get faster the higher the score
                     var newTime = null;
                     var speed = null;
                     switch (key) {
@@ -644,12 +662,13 @@ window.addEventListener("load", function () {
 
                     meteoriteTimes[key] = newTime + randomNum(0, 2000);
 
+                    // random spawn position                    
                     var x = randomNum(70, 500);
                     var y = -(randomNum(70, 140));
-                    // Add in a couple of enemies
                     stage.insert(new Q.Meteorite({ x: x, y: y, speed: speed, color: key }));
                 }
 
+                // If the time is slowed, decrement the time juice bar
                 var slowed = Q.state.get("slowed_time");
                 if (slowed) {
                     var slowTime = Q.state.get("slowTime");
@@ -686,7 +705,7 @@ window.addEventListener("load", function () {
             animateSun: function (step) {
                 var newAngle = step == 1 ? -8 : 8;
                 var newStep = step == 1 ? 2 : 1;
-            
+
                 this.animate({ angle: newAngle }, 7, Q.Easing.Quadratic.InOut, {
                     delay: 1,
                     callback: function () { this.animateSun(newStep); }
@@ -792,13 +811,12 @@ window.addEventListener("load", function () {
                 this._super(p, {
                     asset: "experience_bar.png",
                     cx: 0, cy: 0,
-                    x: 246, y: 476,
                     gravity: 0,
                     collisionMask: Q.SPRITE_NONE
                 });
             },
             draw: function (ctx) {
-                // override draw to show the correct level of time juice
+                // override draw to show the correct level of experience
                 var percentage = this.p.percentage;
                 var width = 330 / 100.0 * percentage;
                 ctx.drawImage(Q.asset(this.p.asset), 0, 0, width, 38, 0, 0, width, 38);
@@ -806,6 +824,8 @@ window.addEventListener("load", function () {
         });
 
         Q.scene('scoreStage', function (stage) {
+            Q.audio.stop("music.ogg");
+
             stage.insert(new Q.Sprite({
                 asset: "score_screen.png",
                 x: Q.width / 2, y: Q.height / 2,
@@ -831,7 +851,7 @@ window.addEventListener("load", function () {
                 Q.stageScene('menuStage');
             });
 
-            
+
             // Score and high score
             var score = Q.state.get('score');
             if (score == null) {
@@ -860,7 +880,7 @@ window.addEventListener("load", function () {
                 align: "left",
                 label: record.toString()
             }));
-            
+
             var highScores = getCookie('high_scores');
             if (highScores == null) {
                 highScores = "0|0|0|0|0"
@@ -870,7 +890,7 @@ window.addEventListener("load", function () {
 
             for (var index = 0; index < highScores.length; index += 1) {
                 var highScore = highScores[index];
-                
+
                 if (score >= parseInt(highScore)) {
                     highScores.splice(index, 0, score);
                     highScores.pop();
@@ -879,7 +899,7 @@ window.addEventListener("load", function () {
                 }
             }
 
-            
+
             // Experience and level
             var exp = getCookie('experience');
             if (exp == null) {
@@ -904,7 +924,7 @@ window.addEventListener("load", function () {
                 expPercentage = ((exp - currentLevelExperience) / nextLevelExperience) * 100;
             }
 
-            var expBar = stage.insert(new Q.ExperienceBar({ percentage: expPercentage }));
+            var expBar = stage.insert(new Q.ExperienceBar({ x: 246, y: 476, percentage: expPercentage }));
             stage.insert(new Q.UI.Text({
                 x: 155, y: 437,
                 size: 55,
@@ -926,7 +946,7 @@ window.addEventListener("load", function () {
                 size: 45,
                 family: "MarkerFeltThin",
                 align: "right",
-                label: levelData['multiplier'] + "x"
+                label: "x" + levelData['multiplier']
             }));
 
             for (var life = 0; life < levelData['lifes']; life += 1) {
@@ -972,21 +992,104 @@ window.addEventListener("load", function () {
                 var score = highScores[index];
 
                 stage.insert(new Q.UI.Text({
-                    x: 130, y: 373+(index*129),
+                    x: 130, y: 373 + (index * 129),
                     size: 70,
                     family: "ChalkboardSE-Regular",
                     align: "left",
                     color: "white",
                     outline: "black",
                     outlineWidth: 6,
-                    label: (index+1)+". "+score
+                    label: (index + 1) + ". " + score
                 }));
             }
         });
     }
 
 
-       
+    { // ## Player & Credits Stage
+        Q.scene('playerStage', function (stage) {
+            stage.insert(new Q.Sprite({
+                asset: "player_background.png",
+                x: Q.width / 2, y: Q.height / 2,
+            }));
+            var backButton = stage.insert(new Q.UI.Button({
+                x: 70, y: 55,
+                sheet: 'backButton'
+            }))
+            backButton.on("click", function () {
+                Q.clearStages();
+                Q.stageScene('menuStage');
+            });
+
+            
+            var exp = getCookie("experience");
+            var level = getLevelForExperience(exp);
+            var levelData = levels[level - 1];
+            var expPercentage = 100;
+            if (level < 20) {
+                var currentLevelExperience = 0;
+                if (level > 1) {
+                    currentLevelExperience = levels[level - 2]['experience'];
+                }
+                var nextLevelExperience = levelData['experience'];
+
+                expPercentage = ((exp - currentLevelExperience) / nextLevelExperience) * 100;
+            }
+
+            var expBar = stage.insert(new Q.ExperienceBar({ x: 268, y: 410, percentage: expPercentage }));
+            stage.insert(new Q.UI.Text({
+                x: 180, y: 395,
+                size: 55,
+                family: "StoneHinge",
+                align: "left",
+                label: level.toString()
+            }));
+
+            stage.insert(new Q.UI.Text({
+                x: 160, y: 483,
+                size: 45,
+                family: "StoneHinge",
+                align: "left",
+                label: levelData['lifes'].toString()
+            }));
+
+            stage.insert(new Q.UI.Text({
+                x: 275, y: 483,
+                size: 45,
+                family: "StoneHinge",
+                align: "left",
+                label: levelData['bombs'].toString()
+            }));
+
+            stage.insert(new Q.UI.Text({
+                x: 390, y: 488,
+                size: 40,
+                family: "StoneHinge",
+                align: "left",
+                label: (levelData['slowTime'] / 1000) + "x"
+            }));
+
+            stage.insert(new Q.UI.Text({
+                x: 535, y: 488,
+                size: 40,
+                family: "StoneHinge",
+                align: "left",
+                label: "x" + levelData['multiplier']
+            }));
+
+
+            stage.insert(new Q.UI.Text({
+                x: 130, y: 600,
+                size: 45,
+                family: "StoneHinge",
+                align: "left",
+                label: "Development and\ndesign:\nGuillermo Cique\nFernández\n\nMusic:\nDelicateSounds"
+            }));
+        });
+    }
+
+
+
     // ## Asset Loading and Game Launch
     // Q.load can be called at any time to load additional assets
     // assets that are already loaded will be skipped
@@ -998,9 +1101,9 @@ window.addEventListener("load", function () {
         "restart_button.png", "restart_button.json", "exit_button.png", "exit_button.json",
         "score_screen.png", "life_icon.png", "bomb_icon.png", "experience_bar.png", "neon_meteorite.png", "neon_meteorite.json", "neon_record.png",
         "meteorites.png", "meteorites.json",
-        "back_button.png", "back_button.json", "leaderboard_background.png",
-        // "bigMBoom1.ogg", "bigMBoom2.ogg", "bigMHit1.ogg", "bigMHit2.ogg", "boom1.ogg", "boom2.ogg",
-        // "menu.ogg", "music.ogg", "pause.ogg", "pop1.ogg", "pop2.ogg", "pop3.ogg", "pop4.ogg", "resume.ogg", "tink.ogg"
+        "back_button.png", "back_button.json", "leaderboard_background.png", "player_background.png",
+        "boom1.ogg", "boom2.ogg", "pop1.ogg", "pop2.ogg", "pop3.ogg", "pop4.ogg",
+         "menu.ogg", "music.ogg", "pause.ogg", "resume.ogg", "tink.ogg"
     ], function () {
         Q.compileSheets("play_button.png", "play_button.json");
         Q.compileSheets("leaderboard_button.png", "leaderboard_button.json");
@@ -1015,17 +1118,14 @@ window.addEventListener("load", function () {
         Q.compileSheets("neon_meteorite.png", "neon_meteorite.json");
         Q.sheet("neonRecord", "neon_record.png", { tilew: 300, tileh: 200, sx: 0, sy: 0, frames: 2 });
 
+        // Remove loading screen        
         var body = document.getElementsByTagName("body")[0];
         var loading = document.getElementById("loading");
         body.removeChild(loading);
 
-        // Q.loadTMX("level.tmx", function () {
         // Finally, call stageScene to run the game
         Q.stageScene("menuStage");
-        // Q.stageScene("leaderboardsStage");
-        // }); 
-
-        }, {
+    }, {
             progressCallback: function (loaded, total) {
                 var element = document.getElementById("loading_progress");
                 element.style.width = Math.floor(loaded / total * 100) + "%";
