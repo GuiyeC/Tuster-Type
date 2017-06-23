@@ -3,7 +3,7 @@
 23 de junio de 2017
 
 ## 1. Diseño del juego
-####Controles
+__Controles__
 - __Y-U-I-H-J-K:__ los puntos en los meteoritos hacen referencia a estas teclas, para destruir un meteorito hay que pulsar las teclas seguidas de izquierda a derecha.
 - __T:__ ralentizar el tiempo.
 - __P:__ pausar el juego.
@@ -35,10 +35,10 @@ El juego tiene cinco escenas:
 3. __Información del jugador:__ en esta pantalla se puede ver el nivel del jugador así como que beneficios tiene acumulados, además en esta pantalla se encuentran los créditos del juego.
 4. __Pantalla de fin de partida:__ en esta pantalla el jugador ve la puntuación obtenida durante la partida y la información actualizada de su nivel y bonificaciones.
 5. __Pantalla principal:__ esta es la pantalla principal del juego, a su vez está formada por cuatro escenarios:
-   5.1. __Información:__ este escenario muestra el HUD del juego, vidas, bombas, puntuación, *'zumo de tiempo'* y combos realizados.
-   5.2. __Pausa:__ desde este escenario el jugador podrá resumir el juego, reiniciar la partida, salir de la partida o activar/desactivar la música y efectos de sonido.
-   5.3. __Fondo:__ fondo del juego, las nubes y el sol son sprites con animaciones en bucle para dar más vida al mundo.
-   5.4. __Juego:__ en este escenario aparecen los meteoritos, es este el escenario que se encarga de reconocer las combinaciones pulsadas destruyendo los meteoritos, maneja la gestión de bombas, ralentización del tiempo, combos y puntuación. El Sprite principal del juego es el *'Meteorite'*, hay seis tipos de meteorito con distintas combinaciones y atributos.
+    5.1. __Información:__ este escenario muestra el HUD del juego, vidas, bombas, puntuación, *'zumo de tiempo'* y combos realizados.
+    5.2. __Pausa:__ desde este escenario el jugador podrá resumir el juego, reiniciar la partida, salir de la partida o activar/desactivar la música y efectos de sonido.
+    5.3. __Fondo:__ fondo del juego, las nubes y el sol son sprites con animaciones en bucle para dar más vida al mundo.
+    5.4. __Juego:__ en este escenario aparecen los meteoritos, es este el escenario que se encarga de reconocer las combinaciones pulsadas destruyendo los meteoritos, maneja la gestión de bombas, ralentización del tiempo, combos y puntuación. El Sprite principal del juego es el *'Meteorite'*, hay seis tipos de meteorito con distintas combinaciones y atributos.
 
 ## 3. Equipo de trabajo y reparto de tareas
 Guillermo Cique Fernández: al ser el único miembro del equipo no ha habido reparto de tareas y toda la carga del desarrollo ha caido sobre mi.
