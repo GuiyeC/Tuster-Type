@@ -133,9 +133,11 @@ window.addEventListener("load", function () {
     { // ## Menu Stage
         Q.scene('menuStage', function (stage) {
             if (musicEnabled) {
-                Q.audio.stop("music.ogg");
-                Q.audio.play("menu.ogg", { loop: true });
-            }    
+                try {
+                    Q.audio.stop("music.ogg");
+                    Q.audio.play("menu.ogg", { loop: true });
+                } catch (ignored) { }
+            }
 
             var background = stage.insert(new Q.Sprite({
                 asset: "menu_background.png",
@@ -176,9 +178,11 @@ window.addEventListener("load", function () {
 
     Q.scene("mainStage", function (stage) {
         if (musicEnabled) {
-            Q.audio.stop("menu.ogg");
-            Q.audio.play("music.ogg", { loop: true });
-        }    
+            try {
+                Q.audio.stop("menu.ogg");
+                Q.audio.play("music.ogg", { loop: true });
+            } catch (ignored) { }
+        }
 
         var exp = getCookie('experience');
         if (exp == null) {
@@ -209,9 +213,11 @@ window.addEventListener("load", function () {
         Q.input.on("pause", this, function () {
             if (gameStage.paused) {
                 if (musicEnabled) {
-                    Q.audio.play("resume.ogg");
-                    Q.audio.play("music.ogg", { loop: true });
-                }    
+                    try {
+                        Q.audio.play("resume.ogg");
+                        Q.audio.play("music.ogg", { loop: true });
+                    } catch (ignored) { }
+                }
                 Q.clearStage(2);
                 gameStage.unpause();
             }
@@ -226,9 +232,11 @@ window.addEventListener("load", function () {
     { // ## Pause Stage
         Q.scene('pauseStage', function (stage) {
             if (musicEnabled) {
-                Q.audio.stop("music.ogg");
-                Q.audio.play("pause.ogg");
-            }    
+                try {
+                    Q.audio.stop("music.ogg");
+                    Q.audio.play("pause.ogg");
+                } catch (ignored) { }
+            }
 
             stage.insert(new Q.Sprite({
                 x: Q.width / 2, y: Q.height / 2, color: "rgba(0,0,0,0.5)",
@@ -246,9 +254,11 @@ window.addEventListener("load", function () {
             }))
             resumeButton.on("click", function () {
                 if (musicEnabled) {
-                    Q.audio.play("resume.ogg");
-                    Q.audio.play("music.ogg", { loop: true });
-                }    
+                    try {
+                        Q.audio.play("resume.ogg");
+                        Q.audio.play("music.ogg", { loop: true });
+                    } catch (ignored) { }
+                }
                 Q.clearStage(2);
                 Q.stage(1).unpause();
             });
@@ -468,8 +478,10 @@ window.addEventListener("load", function () {
 
                 if (musicEnabled) {
                     var audio = Math.round(Math.random() * 1 + 1);
-                    Q.audio.play("boom" + audio + ".ogg");
-                }    
+                    try {
+                        Q.audio.play("boom" + audio + ".ogg");
+                    } catch (ignored) { }
+                }
             },
             explode: function (dt) {
                 this.stop();
@@ -477,8 +489,10 @@ window.addEventListener("load", function () {
 
                 if (musicEnabled) {
                     var audio = Math.round(Math.random() * 3 + 1);
-                    Q.audio.play("pop" + audio + ".ogg");
-                }    
+                    try {
+                        Q.audio.play("pop" + audio + ".ogg");
+                    } catch (ignored) { }
+                }
             }
         });
         Q.scene("game", function (stage) {
@@ -503,7 +517,7 @@ window.addEventListener("load", function () {
                         }
                     });
                 }
-                
+
                 if (count <= 0) {
                     return;
                 }
@@ -565,7 +579,7 @@ window.addEventListener("load", function () {
                 Q.input.on(key, this, function () { add_keystroke(key); });
             }
 
-            
+
             Q.input.on("bomb", this, function () {
                 if (stage.paused) {
                     return;
@@ -580,7 +594,7 @@ window.addEventListener("load", function () {
                 Q.state.dec("bombs", 1);
             });
 
-            
+
             function setSlowed(slowed) {
                 Q.state.set("slowed_time", slowed);
                 Q("Meteorite", 1).each(function () {
@@ -599,7 +613,7 @@ window.addEventListener("load", function () {
                 setSlowed(true);
             });
 
-            
+
             // Time to get a point
             var timeForPoint = 1500;
             var meteoriteTimes = {
@@ -824,7 +838,9 @@ window.addEventListener("load", function () {
         });
 
         Q.scene('scoreStage', function (stage) {
-            Q.audio.stop("music.ogg");
+            try {
+                Q.audio.stop("music.ogg");
+            } catch (ignored) { }
 
             stage.insert(new Q.Sprite({
                 asset: "score_screen.png",
@@ -1021,7 +1037,7 @@ window.addEventListener("load", function () {
                 Q.stageScene('menuStage');
             });
 
-            
+
             var exp = getCookie("experience");
             var level = getLevelForExperience(exp);
             var levelData = levels[level - 1];
@@ -1103,7 +1119,7 @@ window.addEventListener("load", function () {
         "meteorites.png", "meteorites.json",
         "back_button.png", "back_button.json", "leaderboard_background.png", "player_background.png",
         "boom1.ogg", "boom2.ogg", "pop1.ogg", "pop2.ogg", "pop3.ogg", "pop4.ogg",
-         "menu.ogg", "music.ogg", "pause.ogg", "resume.ogg", "tink.ogg"
+        "menu.ogg", "music.ogg", "pause.ogg", "resume.ogg", "tink.ogg"
     ], function () {
         Q.compileSheets("play_button.png", "play_button.json");
         Q.compileSheets("leaderboard_button.png", "leaderboard_button.json");
