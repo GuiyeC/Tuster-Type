@@ -1,5 +1,5 @@
 # Tuster-Type
-*Proyecto Final Desarrollo de Viedeojuegos Mediante Tecnologías Web*  
+*Proyecto Final Desarrollo de Videojuegos Mediante Tecnologías Web*  
 23 de junio de 2017
 
 [Iniciar juego](http://guiyec.github.io/Tuster-Type/)
@@ -49,7 +49,7 @@ __Guillermo Cique Fernández:__ al ser el único miembro del equipo no ha habido
 Todos los recursos gráficos son propios.  
 La música fue creada por un amigo específicamente para el juego.  
 La mayoría de los efectos de sonido fueron encontrados en internet en páginas como [SoundBible](http://soundbible.com/) o [Free Sound Effects](https://www.freesoundeffects.com), algunos de los efectos de sonidos, como el sonido de destruir un meteorito, fueron grabados por mi.  
-Las tipografías del juego fueron encontradas en internet.  
+Las tipografías del juego fueron descargadas de internet.  
 
 * __Tuster iOS:__ juego desarrollado en iOS con una mecánica parecida y el mismo protagonista.
 * __Magic Touch DS:__ el referente original del juego, un mago tiene que estallar los globos que sujetan a unos monstruos que caen lentamente del cielo antes de que lleguen al suelo.
